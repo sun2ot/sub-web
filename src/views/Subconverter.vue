@@ -78,13 +78,13 @@
                     </el-popover>
                     <el-popover placement="bottom" style="margin-left: 10px">
                       <el-row>
-                        <el-checkbox v-model="form.tpl.surge.doh" label="Surge.DoH"></el-checkbox>
-                      </el-row>
-                      <el-row>
                         <el-checkbox v-model="form.tpl.clash.doh" label="Clash.DoH"></el-checkbox>
                       </el-row>
                       <el-row>
-                        <el-checkbox v-model="form.insert" label="网易云"></el-checkbox>
+                        <el-checkbox v-model="form.tpl.provider.expand" label="provider模式"></el-checkbox>
+                      </el-row>
+                      <el-row>
+                        <el-checkbox v-model="form.tpl.surge.doh" label="Surge.DoH"></el-checkbox>
                       </el-row>
                       <el-button slot="reference">定制功能</el-button>
                     </el-popover>
@@ -210,11 +210,16 @@ export default {
           ClashR: "clashr",
           Surge2: "surge&ver=2",
         },
-        backendOptions: [{ value: "http://127.0.0.1:25500/sub?" }],
+        backendOptions: [{ value: "http://127.0.0.1:25500/sub?" }, {value: "https://sub.085404.xyz/sub?"}],
         remoteConfig: [
           {
             label: "universal",
             options: [
+              {
+                label: "sun2ot",
+                value:
+                  "https://raw.githubusercontent.com/sun2ot/ClashRules/main/config/test.ini"
+              },
               {
                 label: "No-Urltest",
                 value:
@@ -310,7 +315,10 @@ export default {
             doh: false // dns 查询是否使用 DoH
           },
           clash: {
-            doh: false
+            doh: true
+          },
+          provider: {
+            expand: true // 是否将规则列表以provider形式附加到配置文件中
           }
         }
       },
@@ -451,7 +459,11 @@ export default {
 
         if (this.form.clientType === "clash") {
           if (this.form.tpl.clash.doh === true) {
-            this.customSubUrl += "&clash.doh=true";
+            this.customSubUrl += "&clash.dns=1";
+          }
+          if (this.form.tpl.expand === true) {
+            // urlencode 中, expand=false 表示 provider 模式
+            this.customSubUrl += "&expand=false";
           }
 
           this.customSubUrl += "&new_name=" + this.form.new_name.toString();
@@ -625,6 +637,7 @@ export default {
           this.form.udp = params.get("udp") === "true";
           this.form.tpl.surge.doh = params.get("surge.doh") === "true";
           this.form.tpl.clash.doh = params.get("clash.doh") === "true";
+          this.form.tpl.expand = params.get("expand") === "true";
           this.form.new_name = params.get("new_name") === "true";
 
           // Hide the configuration dialog
