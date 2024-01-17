@@ -461,7 +461,7 @@ export default {
           if (this.form.tpl.clash.doh === true) {
             this.customSubUrl += "&clash.dns=1";
           }
-          if (this.form.tpl.expand === true) {
+          if (this.form.tpl.provider.expand === true) {
             // urlencode 中, expand=false 表示 provider 模式
             this.customSubUrl += "&expand=false";
           }
