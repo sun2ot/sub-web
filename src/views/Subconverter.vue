@@ -637,7 +637,7 @@ export default {
           this.form.udp = params.get("udp") === "true";
           this.form.tpl.surge.doh = params.get("surge.doh") === "true";
           this.form.tpl.clash.doh = params.get("clash.doh") === "true";
-          this.form.tpl.expand = params.get("expand") === "true";
+          this.form.tpl.provider.expand = params.get("provider.expand") === "true";
           this.form.new_name = params.get("new_name") === "true";
 
           // Hide the configuration dialog
